@@ -2,9 +2,11 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { randomUUID, randomBytes, scryptSync, timingSafeEqual } = require("crypto");
+const { Pool } = require("pg");
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, "public");
+const DATABASE_URL = String(process.env.DATABASE_URL || "").trim();
 
 let MENU_ITEMS = [
   { id: "chai-masala", name: "Masala Chai", price: 89 },
@@ -57,6 +59,100 @@ let publishedState = {
   publishedAt: new Date().toISOString(),
   version: 1
 };
+const APP_STATE_KEY = "runtime_state_v1";
+let dbPool = null;
+
+function replaceArray(target, nextValues) {
+  target.splice(0, target.length, ...nextValues);
+}
+
+function getRuntimeStateSnapshot() {
+  return {
+    menuItems: deepClone(MENU_ITEMS),
+    orders: deepClone(orders),
+    stores: deepClone(stores),
+    outletUsers: deepClone(outletUsers),
+    adminUsers: deepClone(adminUsers),
+    paymentConfig: deepClone(paymentConfig),
+    publishedState: deepClone(publishedState)
+  };
+}
+
+function applyRuntimeStateSnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== "object") return false;
+  const nextMenu = Array.isArray(snapshot.menuItems) ? snapshot.menuItems : [];
+  const nextOrders = Array.isArray(snapshot.orders) ? snapshot.orders : [];
+  const nextStores = Array.isArray(snapshot.stores) ? snapshot.stores : [];
+  const nextOutletUsers = Array.isArray(snapshot.outletUsers) ? snapshot.outletUsers : [];
+  const nextAdminUsers = Array.isArray(snapshot.adminUsers) ? snapshot.adminUsers : [];
+  const nextPaymentConfig = snapshot.paymentConfig && typeof snapshot.paymentConfig === "object" ? snapshot.paymentConfig : {};
+  const nextPublishedState = snapshot.publishedState && typeof snapshot.publishedState === "object" ? snapshot.publishedState : {};
+
+  MENU_ITEMS = deepClone(nextMenu);
+  replaceArray(orders, deepClone(nextOrders));
+  replaceArray(stores, deepClone(nextStores));
+  replaceArray(outletUsers, deepClone(nextOutletUsers));
+  replaceArray(adminUsers, deepClone(nextAdminUsers));
+  Object.assign(paymentConfig, deepClone(nextPaymentConfig));
+  publishedState = {
+    menu: Array.isArray(nextPublishedState.menu) ? deepClone(nextPublishedState.menu) : deepClone(MENU_ITEMS),
+    stores: Array.isArray(nextPublishedState.stores) ? deepClone(nextPublishedState.stores) : deepClone(stores),
+    paymentConfig:
+      nextPublishedState.paymentConfig && typeof nextPublishedState.paymentConfig === "object"
+        ? deepClone(nextPublishedState.paymentConfig)
+        : deepClone(paymentConfig),
+    publishedAt: String(nextPublishedState.publishedAt || new Date().toISOString()),
+    version: Number(nextPublishedState.version || 1)
+  };
+  return true;
+}
+
+async function persistRuntimeState() {
+  if (!dbPool) return;
+  const snapshot = getRuntimeStateSnapshot();
+  await dbPool.query(
+    `
+      INSERT INTO app_state (key, value, updated_at)
+      VALUES ($1, $2::jsonb, NOW())
+      ON CONFLICT (key)
+      DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()
+    `,
+    [APP_STATE_KEY, JSON.stringify(snapshot)]
+  );
+}
+
+async function persistRuntimeStateSafe() {
+  try {
+    await persistRuntimeState();
+  } catch (err) {
+    console.error("[state] Failed to persist runtime state:", err.message);
+  }
+}
+
+async function initializePersistence() {
+  if (!DATABASE_URL) {
+    console.log("[state] DATABASE_URL not set. Running with in-memory state.");
+    return;
+  }
+  dbPool = new Pool({ connectionString: DATABASE_URL });
+  await dbPool.query(`
+    CREATE TABLE IF NOT EXISTS app_state (
+      key TEXT PRIMARY KEY,
+      value JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  const { rows } = await dbPool.query("SELECT value FROM app_state WHERE key = $1 LIMIT 1", [APP_STATE_KEY]);
+  if (rows.length && rows[0].value) {
+    const loaded = applyRuntimeStateSnapshot(rows[0].value);
+    if (loaded) {
+      console.log("[state] Loaded runtime state from PostgreSQL.");
+      return;
+    }
+  }
+  await persistRuntimeState();
+  console.log("[state] Initialized PostgreSQL runtime state.");
+}
 
 function hasUnpublishedChanges() {
   return (
@@ -82,6 +178,7 @@ function publishDraftState() {
     publishedAt: new Date().toISOString(),
     version: Number(publishedState.version || 0) + 1
   };
+  void persistRuntimeStateSafe();
   return getPublishStatus();
 }
 
@@ -293,6 +390,7 @@ async function sendAdminCredentials(user, req, subjectPrefix = "Admin Login Cred
       previewUrl: `${getBaseUrl(req)}/admin`
     });
   }
+  await persistRuntimeStateSafe();
   return {
     delivery,
     loginId
@@ -626,7 +724,7 @@ function handleApi(req, res, parsedUrl) {
       return sendJson(res, 401, { error: "Unauthorized outlet session." });
     }
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const code = (body.pickupCode || "").trim().toUpperCase();
         if (!code) {
           return sendJson(res, 400, { error: "pickupCode is required." });
@@ -640,6 +738,7 @@ function handleApi(req, res, parsedUrl) {
         }
         order.status = "COLLECTED";
         order.collectedAt = new Date().toISOString();
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Order verified and handed over.", order });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -647,7 +746,7 @@ function handleApi(req, res, parsedUrl) {
 
   if (req.method === "POST" && parsedUrl.pathname === "/api/orders") {
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const { customerName, phone, items, paymentMethod, outletId, outletName } = body;
         if (!customerName || !phone || !Array.isArray(items) || items.length === 0) {
           return sendJson(res, 400, { error: "customerName, phone and items are required." });
@@ -689,7 +788,7 @@ function handleApi(req, res, parsedUrl) {
           createdAt: new Date().toISOString()
         };
         orders.unshift(order);
-
+        await persistRuntimeStateSafe();
         return sendJson(res, 201, { order });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -793,7 +892,7 @@ function handleApi(req, res, parsedUrl) {
 
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/auth/login") {
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const rawLogin = String(body?.mobile || body?.loginId || body?.email || "").trim();
         const email = normalizeEmail(rawLogin);
         const mobile = normalizeMobile(rawLogin);
@@ -842,7 +941,7 @@ function handleApi(req, res, parsedUrl) {
 
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/auth/change-password-first-login") {
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const token = String(body?.firstLoginToken || "").trim();
         const newPassword = String(body?.newPassword || "").trim();
         if (!token || !newPassword) {
@@ -865,6 +964,7 @@ function handleApi(req, res, parsedUrl) {
         user.mustChangePassword = false;
         user.activatedAt = user.activatedAt || new Date().toISOString();
         adminFirstLoginTokens.delete(token);
+        await persistRuntimeStateSafe();
 
         const authToken = randomUUID();
         adminSessions.set(authToken, {
@@ -938,7 +1038,7 @@ function handleApi(req, res, parsedUrl) {
 
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/auth/reset-password") {
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const token = String(body?.token || "").trim();
         const password = String(body?.password || "").trim();
         if (!token || !password) {
@@ -960,6 +1060,7 @@ function handleApi(req, res, parsedUrl) {
         user.passwordHash = hashPassword(password);
         user.mustChangePassword = false;
         adminResetTokens.delete(token);
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Password updated. Please login." });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -980,7 +1081,7 @@ function handleApi(req, res, parsedUrl) {
 
   if (req.method === "POST" && parsedUrl.pathname === "/api/verify-pickup") {
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const code = (body.pickupCode || "").trim().toUpperCase();
         if (!code) {
           return sendJson(res, 400, { error: "pickupCode is required." });
@@ -996,6 +1097,7 @@ function handleApi(req, res, parsedUrl) {
 
         order.status = "COLLECTED";
         order.collectedAt = new Date().toISOString();
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Order verified and handed over.", order });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -1086,7 +1188,7 @@ function handleApi(req, res, parsedUrl) {
     const id = decodeURIComponent(parsedUrl.pathname.replace("/api/admin/users/", "")).trim();
     if (!id || id.includes("/")) return sendJson(res, 404, { error: "Admin user not found." });
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const user = adminUsers.find((entry) => entry.id === id);
         if (!user) return sendJson(res, 404, { error: "Admin user not found." });
 
@@ -1128,7 +1230,7 @@ function handleApi(req, res, parsedUrl) {
             if (session.userId === user.id) adminSessions.delete(token);
           }
         }
-
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Admin user updated.", user: sanitizeAdminUser(user) });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -1152,7 +1254,7 @@ function handleApi(req, res, parsedUrl) {
     for (const [token, session] of adminSessions.entries()) {
       if (session.userId === user.id) adminSessions.delete(token);
     }
-    return sendJson(res, 200, { message: "Admin user deleted.", user: sanitizeAdminUser(user) });
+    return persistRuntimeStateSafe().then(() => sendJson(res, 200, { message: "Admin user deleted.", user: sanitizeAdminUser(user) }));
   }
 
   if (req.method === "GET" && parsedUrl.pathname === "/api/admin/summary") {
@@ -1193,12 +1295,13 @@ function handleApi(req, res, parsedUrl) {
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/menu") {
     if (!requireAdminPermission(req, res, "menu:write")) return;
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const result = validateAndNormalizeMenu(body.menu);
         if (!result.ok) {
           return sendJson(res, 400, { error: result.error });
         }
         MENU_ITEMS = result.menu;
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Menu updated.", menu: MENU_ITEMS });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -1207,7 +1310,7 @@ function handleApi(req, res, parsedUrl) {
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/stores") {
     if (!requireAdminPermission(req, res, "stores:write")) return;
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const normalized = normalizeStoreInput(body);
         if (!normalized.ok) {
           return sendJson(res, 400, { error: normalized.error });
@@ -1215,6 +1318,7 @@ function handleApi(req, res, parsedUrl) {
         const id = generateStoreId();
         const store = { id, ...normalized.store, createdAt: new Date().toISOString() };
         stores.push(store);
+        await persistRuntimeStateSafe();
         return sendJson(res, 201, { message: "Store created.", store: { ...store, summary: getStoreSummary(store.id) } });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -1223,7 +1327,7 @@ function handleApi(req, res, parsedUrl) {
   if (req.method === "PUT" && parsedUrl.pathname.startsWith("/api/admin/stores/")) {
     if (!requireAdminPermission(req, res, "stores:write")) return;
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const storeId = decodeURIComponent(parsedUrl.pathname.replace("/api/admin/stores/", "")).trim();
         const store = stores.find((entry) => entry.id === storeId);
         if (!store) {
@@ -1234,6 +1338,7 @@ function handleApi(req, res, parsedUrl) {
           return sendJson(res, 400, { error: normalized.error });
         }
         Object.assign(store, normalized.store);
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Store updated.", store: { ...store, summary: getStoreSummary(store.id) } });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -1252,7 +1357,7 @@ function handleApi(req, res, parsedUrl) {
         outletUsers.splice(i, 1);
       }
     }
-    return sendJson(res, 200, { message: "Store deleted.", store: deletedStore });
+    return persistRuntimeStateSafe().then(() => sendJson(res, 200, { message: "Store deleted.", store: deletedStore }));
   }
 
   if (req.method === "GET" && parsedUrl.pathname === "/api/admin/outlet-users") {
@@ -1263,7 +1368,7 @@ function handleApi(req, res, parsedUrl) {
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/outlet-users") {
     if (!requireAdminPermission(req, res, "outlet-users:write")) return;
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const username = String(body?.username || "").trim().toLowerCase();
         const pin = String(body?.pin || "").trim();
         const storeId = String(body?.storeId || "").trim();
@@ -1283,6 +1388,7 @@ function handleApi(req, res, parsedUrl) {
           existing.pin = pin;
           existing.storeId = storeId;
           existing.displayName = displayName;
+          await persistRuntimeStateSafe();
           return sendJson(res, 200, {
             message: "Outlet credentials updated.",
             outletUser: sanitizeOutletUser(existing)
@@ -1297,6 +1403,7 @@ function handleApi(req, res, parsedUrl) {
           createdAt: new Date().toISOString()
         };
         outletUsers.push(user);
+        await persistRuntimeStateSafe();
         return sendJson(res, 201, {
           message: "Outlet credentials created.",
           outletUser: sanitizeOutletUser(user)
@@ -1329,7 +1436,7 @@ function handleApi(req, res, parsedUrl) {
   if (req.method === "POST" && parsedUrl.pathname === "/api/admin/payment-config") {
     if (!requireAdminPermission(req, res, "payment-config:write")) return;
     return readBody(req)
-      .then((body) => {
+      .then(async (body) => {
         const hasBrandName = Object.prototype.hasOwnProperty.call(body, "brandName");
         const hasCustomerAppName = Object.prototype.hasOwnProperty.call(body, "customerAppName");
         const nextBrandName = hasBrandName
@@ -1380,6 +1487,7 @@ function handleApi(req, res, parsedUrl) {
           return sendJson(res, 400, { error: "Upload a brand logo when logo mode is enabled." });
         }
         Object.assign(paymentConfig, nextConfig);
+        await persistRuntimeStateSafe();
         return sendJson(res, 200, { message: "Payment configuration updated.", paymentConfig });
       })
       .catch((err) => sendJson(res, 400, { error: err.message }));
@@ -1430,6 +1538,13 @@ const server = http.createServer((req, res) => {
   return sendFile(res, resolvedPath);
 });
 
-server.listen(PORT, () => {
-  console.log(`Vedic Chai pre-order app running at http://localhost:${PORT}`);
-});
+initializePersistence()
+  .catch((err) => {
+    console.error("[state] PostgreSQL init failed. Continuing in memory mode.", err.message);
+    dbPool = null;
+  })
+  .finally(() => {
+    server.listen(PORT, () => {
+      console.log(`Vedic Chai pre-order app running at http://localhost:${PORT}`);
+    });
+  });
