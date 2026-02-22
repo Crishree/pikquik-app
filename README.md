@@ -72,5 +72,31 @@ Three independent Expo app targets are available:
 3. Admin App
 - `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-admin`
 - `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-admin/README.md`
+
+## Cloud Development (GitHub Codespaces)
+
+This repo is configured for Codespaces via:
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/.devcontainer/devcontainer.json`
+
+### Start in Codespaces
+
+1. Open the GitHub repository.
+2. Click `Code` -> `Codespaces` -> `Create codespace on main` (or your feature branch).
+3. Wait for container setup to complete (`npm install` runs automatically).
+4. Start app:
+
+```bash
+npm start
+```
+
+5. Open forwarded port `3000` from the `Ports` tab.
+
+### Suggested Workflow
+
+1. Create branch: `feature/<name>`
+2. Develop in Codespace
+3. Commit and push
+4. Open PR to `main`
+5. Merge PR (Render auto-deploys from `main`)
 # Grab-and-Go-App
 # vedic-chai-app
