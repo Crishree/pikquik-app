@@ -12,6 +12,16 @@
   </head>
   <body>
     <header class="site-header">
+      <div class="top-band">
+        <div class="container top-band-inner">
+          <p>Built for restaurant and beverage brands running high-volume pickup operations.</p>
+          <div class="top-band-actions">
+            <a href="/customer">Customer App</a>
+            <a href="/outlet">Outlet App</a>
+            <a class="top-band-admin" href="/admin">Admin Console</a>
+          </div>
+        </div>
+      </div>
       <div class="container header-inner">
         <a class="brand" href="/">PikQuik</a>
         <button id="menuToggleBtn" class="menu-toggle" type="button" aria-label="Open menu">Menu</button>
@@ -20,16 +30,15 @@
           <a href="#features">Features</a>
           <a href="#pricing">Pricing</a>
           <a href="#faq">FAQ</a>
-          <a class="btn btn-ghost" href="/customer">Live Customer App</a>
           <a class="btn btn-primary" href="#demo">Book Demo</a>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="hero">
-        <div class="container hero-grid">
-          <div>
+      <section class="hero hero-mosaic">
+        <div class="container hero-mosaic-grid">
+          <div class="hero-main-card">
             <p class="eyebrow">PikQuik for Chai, Coffee, and QSR Chains</p>
             <h1>Prepaid Pickup Ordering That Cuts Queue Time and Boosts Repeat Orders.</h1>
             <p class="subhead">
@@ -40,32 +49,39 @@
               <a class="btn btn-primary" href="#demo">Book Demo</a>
               <a class="btn btn-ghost" href="/admin">View Admin Console</a>
             </div>
-            <p class="hero-micro">Includes customer app, outlet app, admin dashboard, store-wise analytics, and publish workflow.</p>
+            <p class="hero-micro">Customer app + outlet app + admin dashboard in one operating system.</p>
           </div>
-          <div class="hero-card">
-            <h3>Today on PikQuik</h3>
-            <div class="metric-grid">
-              <article>
-                <p>Prepaid Orders</p>
-                <strong>1,248</strong>
-                <span>+18% vs last week</span>
-              </article>
-              <article>
-                <p>Avg Pickup Wait</p>
-                <strong>2m 14s</strong>
-                <span>Down from 6m 08s</span>
-              </article>
-              <article>
-                <p>Repeat Customers</p>
-                <strong>39%</strong>
-                <span>Within 30 days</span>
-              </article>
-              <article>
-                <p>Network GMV</p>
-                <strong>₹8.4L</strong>
-                <span>Current cycle</span>
-              </article>
-            </div>
+          <div class="promo-wall">
+            <article class="promo-tile tile-green">
+              <p>launch faster</p>
+              <h3>Go live in days</h3>
+              <span>⚡</span>
+            </article>
+            <article class="promo-tile tile-orange">
+              <p>prepaid orders</p>
+              <h3>Smart pickup flow</h3>
+              <span>🧾</span>
+            </article>
+            <article class="promo-tile tile-green">
+              <p>outlet ops</p>
+              <h3>Real-time queue</h3>
+              <span>🏬</span>
+            </article>
+            <article class="promo-tile tile-orange">
+              <p>analytics</p>
+              <h3>Track GMV + AOV</h3>
+              <span>📈</span>
+            </article>
+            <article class="promo-tile tile-green tile-wide">
+              <p>multi-store control</p>
+              <h3>One dashboard for your full network</h3>
+              <span>🧭</span>
+            </article>
+            <article class="promo-tile tile-orange">
+              <p>payments</p>
+              <h3>UPI + gateway ready</h3>
+              <span>💳</span>
+            </article>
           </div>
         </div>
       </section>
@@ -77,7 +93,7 @@
             <h2>Built for How Pickup Operations Actually Run.</h2>
           </div>
           <div class="triple-grid">
-            <article class="panel">
+            <article class="panel panel-green">
               <h3>Customer App</h3>
               <p>Discover nearest outlet, pre-order menu, pay in advance, and collect with pickup code.</p>
               <ul>
@@ -86,7 +102,7 @@
                 <li>Auto-reorder for repeat visits</li>
               </ul>
             </article>
-            <article class="panel">
+            <article class="panel panel-orange">
               <h3>Outlet App</h3>
               <p>Live queue for each store with verification and handover workflow.</p>
               <ul>
@@ -95,7 +111,7 @@
                 <li>Ready and collected status tracking</li>
               </ul>
             </article>
-            <article class="panel">
+            <article class="panel panel-green">
               <h3>Admin Dashboard</h3>
               <p>Brand setup, store setup, menu control, publish lifecycle, and analytics in one place.</p>
               <ul>
@@ -115,27 +131,27 @@
             <h2>Operational Clarity Without Extra Complexity.</h2>
           </div>
           <div class="feature-grid">
-            <article class="feature">
+            <article class="feature feature-orange">
               <h3>Publish-Controlled Changes</h3>
               <p>Make updates in admin and push to customer app only when ready.</p>
             </article>
-            <article class="feature">
+            <article class="feature feature-green">
               <h3>Store-Wise Payment Setup</h3>
               <p>Configure UPI and payment methods separately for each store.</p>
             </article>
-            <article class="feature">
+            <article class="feature feature-orange">
               <h3>Outlet Login Controls</h3>
               <p>Create secure outlet credentials and control who can verify pickups.</p>
             </article>
-            <article class="feature">
+            <article class="feature feature-green">
               <h3>Excel Menu Upload</h3>
               <p>Bulk upload store menus with pricing and publish instantly.</p>
             </article>
-            <article class="feature">
+            <article class="feature feature-orange">
               <h3>Analytics by Date Range</h3>
               <p>Track trends using last 7 days, MTD, YTD, previous month, and custom ranges.</p>
             </article>
-            <article class="feature">
+            <article class="feature feature-green">
               <h3>Built for Multi-Store Chains</h3>
               <p>Expand from pilot outlet to network rollout on the same platform.</p>
             </article>
@@ -150,7 +166,7 @@
             <h2>Start Lean, Scale Store by Store.</h2>
           </div>
           <div class="pricing-grid">
-            <article class="price-card">
+            <article class="price-card price-orange">
               <p class="tier">Starter</p>
               <h3>Single Store</h3>
               <p class="price">₹4,999<span>/month</span></p>
@@ -161,7 +177,7 @@
               </ul>
               <a class="btn btn-ghost" href="#demo">Request Setup</a>
             </article>
-            <article class="price-card featured">
+            <article class="price-card featured price-green">
               <p class="tier">Growth</p>
               <h3>Up to 5 Stores</h3>
               <p class="price">₹14,999<span>/month</span></p>
@@ -172,7 +188,7 @@
               </ul>
               <a class="btn btn-primary" href="#demo">Book Demo</a>
             </article>
-            <article class="price-card">
+            <article class="price-card price-orange">
               <p class="tier">Scale</p>
               <h3>Enterprise</h3>
               <p class="price">Custom</p>
@@ -195,19 +211,19 @@
             <h2>Common Questions</h2>
           </div>
           <div class="faq-list">
-            <article>
+            <article class="faq-card faq-green">
               <h3>How long does onboarding take?</h3>
               <p>Most brands go live in 2-5 business days after store and payment details are shared.</p>
             </article>
-            <article>
+            <article class="faq-card faq-orange">
               <h3>Can each store use different UPI details?</h3>
               <p>Yes. Store-level UPI and payment methods are supported in admin setup.</p>
             </article>
-            <article>
+            <article class="faq-card faq-green">
               <h3>Do you support Razorpay integration?</h3>
               <p>Yes. Gateway integration is supported through admin gateway configuration.</p>
             </article>
-            <article>
+            <article class="faq-card faq-orange">
               <h3>Can we start with one store and expand later?</h3>
               <p>Yes. The platform is designed to scale from a pilot outlet to a multi-store network.</p>
             </article>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vedic Chai Admin Dashboard</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="/styles.css?v=admin-login-refresh-20260215-2" />
   </head>
   <body class="admin-page">
@@ -70,6 +70,8 @@
                   <button id="adminSignupBtn" type="button">Create Account</button>
                 </div>
               </div>
+
+              <div id="adminFirstLoginStatus"></div>
 
               <div id="adminFirstLoginForm" class="admin-login-form" style="display: none">
                 <div>
@@ -504,7 +506,7 @@
 
                 <section class="card admin-card" id="adminUsersSection">
                   <h2>Admin Users</h2>
-                  <p class="admin-subtitle" style="margin-top: 0">Owner-only: create, edit role/status, resend invite, and delete admin users.</p>
+                  <p class="admin-subtitle" style="margin-top: 0">Owner-only: create, edit role/status, resend credentials, and delete admin users.</p>
                   <div class="grid admin-form-grid">
                     <div>
                       <label for="adminUserNameInput">Name</label>
@@ -535,7 +537,7 @@
                       </select>
                     </div>
                     <div style="display: flex; align-items: end">
-                      <button id="createAdminUserBtn" type="button">Create & Send Invite</button>
+                      <button id="createAdminUserBtn" type="button">Create & Email Credentials</button>
                     </div>
                   </div>
                   <div class="admin-table-wrap" style="margin-top: 12px">
@@ -610,6 +612,6 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="/admin.js?v=admin-users-20260215-8"></script>
+    <script src="/admin.js?v=admin-users-20260215-9"></script>
   </body>
 </html>

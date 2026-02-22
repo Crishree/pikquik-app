@@ -41,6 +41,7 @@ const adminSignupCompanyInput = document.getElementById("adminSignupCompany");
 const adminSignupMobileInput = document.getElementById("adminSignupMobile");
 const adminSignupEmailInput = document.getElementById("adminSignupEmail");
 const adminSignupBtn = document.getElementById("adminSignupBtn");
+const adminFirstLoginStatus = document.getElementById("adminFirstLoginStatus");
 const adminFirstLoginNewPasswordInput = document.getElementById("adminFirstLoginNewPassword");
 const adminFirstLoginConfirmPasswordInput = document.getElementById("adminFirstLoginConfirmPassword");
 const adminFirstLoginSaveBtn = document.getElementById("adminFirstLoginSaveBtn");
@@ -332,6 +333,10 @@ function showLoginStatus(message, type) {
   showStatus(adminLoginStatus, message, type);
 }
 
+function showFirstLoginStatus(message, type) {
+  showStatus(adminFirstLoginStatus, message, type);
+}
+
 function showStoreStatus(message, type) {
   showStatus(storeStatus, message, type);
 }
@@ -531,6 +536,7 @@ function setAuthMode(mode) {
   if (adminLoginForm) adminLoginForm.style.display = isLogin ? "grid" : "none";
   if (adminSignupForm) adminSignupForm.style.display = isLogin ? "none" : "grid";
   if (adminFirstLoginForm) adminFirstLoginForm.style.display = "none";
+  showFirstLoginStatus("", "");
   if (adminAuthLoginTab) adminAuthLoginTab.classList.toggle("admin-auth-tab-active", isLogin);
   if (adminAuthSignupTab) adminAuthSignupTab.classList.toggle("admin-auth-tab-active", !isLogin);
 }
@@ -542,7 +548,8 @@ function setFirstLoginMode(token) {
   if (adminFirstLoginForm) adminFirstLoginForm.style.display = "grid";
   if (adminAuthLoginTab) adminAuthLoginTab.classList.remove("admin-auth-tab-active");
   if (adminAuthSignupTab) adminAuthSignupTab.classList.remove("admin-auth-tab-active");
-  showLoginStatus("Temporary password accepted. Set a new password to continue.", "success");
+  showLoginStatus("", "");
+  showFirstLoginStatus("Temporary password accepted. Set a new password to continue.", "success");
 }
 
 function getRolePermissions(role) {
@@ -992,8 +999,7 @@ function renderAdminUsersTable() {
       try {
         const data = await fetchAdmin(`/api/admin/users/${encodeURIComponent(id)}/resend-invite`, { method: "POST" });
         const deliveryText = data?.delivery === "email" ? " Sent by email." : "";
-        const extra = data?.temporaryPassword ? ` Temporary password: ${data.temporaryPassword}` : "";
-        showAdminUsersStatus(`Credentials resent. Login ID: ${data?.loginId || "-"}.${deliveryText}${extra}`, "success");
+        showAdminUsersStatus(`Credentials resent. Login ID: ${data?.loginId || "-"}.${deliveryText}`, "success");
       } catch (err) {
         showAdminUsersStatus(err.message, "error");
       }
@@ -1783,8 +1789,7 @@ async function signupAdmin() {
       return json;
     });
     const deliveryText = data?.delivery === "email" ? " Credentials sent by email." : "";
-    const passText = data?.temporaryPassword ? ` Temporary password: ${data.temporaryPassword}` : "";
-    showLoginStatus(`Signup created. Login with mobile ${mobile}.${deliveryText}${passText}`, "success");
+    showLoginStatus(`Signup created. Login with mobile ${mobile}.${deliveryText}`, "success");
     setAuthMode("login");
     adminUsernameInput.value = mobile;
   } catch (err) {
@@ -1796,16 +1801,16 @@ async function completeFirstLoginPasswordChange() {
   const newPassword = String(adminFirstLoginNewPasswordInput?.value || "").trim();
   const confirm = String(adminFirstLoginConfirmPasswordInput?.value || "").trim();
   if (!pendingFirstLoginToken) {
-    showLoginStatus("First-login session expired. Please login again with temporary password.", "error");
+    showFirstLoginStatus("First-login session expired. Please login again with temporary password.", "error");
     setAuthMode("login");
     return;
   }
   if (!newPassword || newPassword.length < 8) {
-    showLoginStatus("New password must be at least 8 characters.", "error");
+    showFirstLoginStatus("New password must be at least 8 characters.", "error");
     return;
   }
   if (newPassword !== confirm) {
-    showLoginStatus("New password and confirm password do not match.", "error");
+    showFirstLoginStatus("New password and confirm password do not match.", "error");
     return;
   }
   try {
@@ -1827,10 +1832,11 @@ async function completeFirstLoginPasswordChange() {
     adminContent.style.display = "block";
     applyRoleAccess();
     showPanel("home");
+    showFirstLoginStatus("", "");
     showLoginStatus("", "success");
     startAutoRefresh();
   } catch (err) {
-    showLoginStatus(err.message, "error");
+    showFirstLoginStatus(err.message, "error");
   }
 }
 
@@ -1852,8 +1858,7 @@ async function createAdminUser() {
       body: JSON.stringify({ name, mobile, email, companyName, role })
     });
     const deliveryText = data?.delivery === "email" ? " Sent by email." : "";
-    const extra = data?.temporaryPassword ? ` Temporary password: ${data.temporaryPassword}` : "";
-    showAdminUsersStatus(`Admin user saved. Login ID: ${data?.loginId || mobile}.${deliveryText}${extra}`, "success");
+    showAdminUsersStatus(`Admin user saved. Login ID: ${data?.loginId || mobile}.${deliveryText}`, "success");
     if (adminUserNameInput) adminUserNameInput.value = "";
     if (adminUserEmailInput) adminUserEmailInput.value = "";
     if (adminUserMobileInput) adminUserMobileInput.value = "";
@@ -1892,8 +1897,7 @@ async function forgotPassword() {
       return json;
     });
     const deliveryText = data?.delivery === "email" ? " Sent by email." : "";
-    const passText = data?.temporaryPassword ? ` Temporary password: ${data.temporaryPassword}` : "";
-    showLoginStatus(`If this login exists, credentials were sent.${deliveryText}${passText}`, "success");
+    showLoginStatus(`If this login exists, credentials were sent.${deliveryText}`, "success");
   } catch (err) {
     showLoginStatus(err.message, "error");
   }
