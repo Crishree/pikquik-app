@@ -673,3 +673,77 @@ h1 {
     align-items: flex-start;
   }
 }
+/* --- Dark SaaS override --- */
+:root {
+  --bg: #090909;
+  --bg-soft: #0f0f10;
+  --panel: #121214;
+  --text: #f3f3f5;
+  --muted: #a5a8af;
+  --border: #26262b;
+  --primary: #ff6a00;
+  --primary-strong: #e85f00;
+  --accent: #ff7b22;
+  --accent-strong: #ff5a00;
+}
+
+body {
+  background: radial-gradient(circle at 20% 0%, #19110c 0%, #090909 45%, #070707 100%);
+  color: var(--text);
+}
+
+.site-header {
+  background: rgba(8, 8, 10, 0.86);
+  border-bottom: 1px solid var(--border);
+}
+
+.top-band {
+  background: #0d0d0f;
+  border-bottom: 1px solid var(--border);
+}
+
+.top-band-inner p,
+.top-band-actions a,
+.site-nav a,
+.footer-inner p,
+.footer-links a,
+.subhead,
+.hero-micro {
+  color: #c7c9ce;
+}
+
+.top-band-actions .top-band-admin,
+.btn-primary {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+  border-color: var(--primary-strong);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: #121214;
+  border-color: #313138;
+  color: #f0f0f2;
+}
+
+.hero-main-card,
+.panel,
+.feature,
+.price-card,
+.faq-list article,
+.demo-form {
+  background: linear-gradient(180deg, #121214 0%, #0f0f11 100%);
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.45);
+}
+
+h1, h2, h3, .brand { color: #f7f7f8; }
+.eyebrow { color: #ff8c3a; }
+
+.promo-tile.tile-green,
+.promo-tile.tile-orange,
+.panel.panel-green, .panel.panel-orange,
+.feature.feature-green, .feature.feature-orange,
+.faq-card.faq-green, .faq-card.faq-orange {
+  background: linear-gradient(160deg, #1a120d 0%, #130f0e 100%);
+  border-color: #2f251d;
+}
