@@ -962,3 +962,36 @@ body {
 
 .section { padding: 74px 0; }
 .subhead { max-width: 50ch; line-height: 1.7; }
+grep -q "Pastel readability refresh" public/landing.css || cat <<'EOF' >> public/landing.css
+
+/* --- Pastel readability refresh --- */
+:root {
+  --bg: #f7f1e2;
+  --bg-soft: #f2ead8;
+  --panel: #fffdf8;
+  --text: #1f2445;
+  --muted: #515a78;
+  --border: #d9d0bc;
+  --primary: #f3bd2e;
+  --primary-strong: #dfaa1f;
+  --accent: #72c6c3;
+  --accent-strong: #4fb2ad;
+}
+body { background: linear-gradient(180deg, #fbf7ec 0%, #f5efdf 45%, #f0e8d5 100%); color: var(--text); }
+.hero-main-card,.panel,.feature,.price-card,.faq-list article,.demo-form {
+  background: #fffdf8; border: 1px solid #ddd1ba; border-radius: 16px; box-shadow: 0 12px 26px rgba(38,33,20,.08);
+}
+.tile-green { background: linear-gradient(165deg, #b8e9e6 0%, #93d7d2 100%); }
+.tile-orange { background: linear-gradient(165deg, #ffd58e 0%, #f7c35d 100%); }
+.promo-tile h3,.promo-tile p { color: #1f2445; }
+.pricing-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
+.price-card { padding: 24px; }
+.price-card h3 { margin-top: 8px; font-size: 1.22rem; color: #1f2445; }
+.price { margin-top: 14px; font-size: 2.3rem; line-height: 1; color: #141934; }
+.price span { font-size: .98rem; color: #445073; }
+.price-card ul { margin-top: 18px; line-height: 1.8; font-size: .95rem; color: #2f3656; }
+.price-card.featured { border: 2px solid #f0bb47; transform: translateY(-4px); box-shadow: 0 18px 34px rgba(183,133,22,.2); }
+.pricing-note { margin-top: 20px; color: #495375; font-size: .92rem; }
+.section { padding: 74px 0; }
+.subhead { max-width: 50ch; line-height: 1.7; }
+EOF
