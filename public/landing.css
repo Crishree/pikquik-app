@@ -995,3 +995,70 @@ body { background: linear-gradient(180deg, #fbf7ec 0%, #f5efdf 45%, #f0e8d5 100%
 .section { padding: 74px 0; }
 .subhead { max-width: 50ch; line-height: 1.7; }
 EOF
+/* --- Emergency readability override --- */
+body,
+.site-header,
+.top-band,
+.section,
+.section-soft,
+.hero-main-card,
+.panel,
+.feature,
+.price-card,
+.faq-card,
+.demo-form {
+  color: #1a2140 !important;
+}
+
+.hero-main-card {
+  background: #fffaf0 !important;
+  border: 1px solid #decfb4 !important;
+}
+
+.hero-main-card h1,
+.hero-main-card .subhead,
+.hero-main-card .hero-micro,
+.section h2,
+.section h3,
+.panel h3,
+.feature h3,
+.price-card h3,
+.faq-card h3,
+.price,
+.price span,
+.price-card ul,
+.pricing-note {
+  color: #1a2140 !important;
+  opacity: 1 !important;
+}
+
+.promo-tile {
+  background: #f7c96a !important;
+  border: 1px solid #ddb25b !important;
+}
+
+.promo-tile h3,
+.promo-tile p,
+.promo-tile span {
+  color: #1a2140 !important;
+  opacity: 1 !important;
+}
+
+.tile-green {
+  background: #9fded8 !important;
+}
+.tile-orange {
+  background: #f7c96a !important;
+}
+
+.btn-primary {
+  background: #f1b82e !important;
+  color: #1a2140 !important;
+  border-color: #d29d1b !important;
+}
+
+.btn-ghost {
+  background: #ffffff !important;
+  color: #1a2140 !important;
+  border-color: #d8cbb1 !important;
+}
