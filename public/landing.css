@@ -1089,3 +1089,52 @@ cat <<'EOF' >> public/landing.css
   opacity: 1 !important;
 }
 EOF
+/* --- Final light card cleanup --- */
+.panel,
+.feature,
+.faq-card,
+.price-card,
+.promo-tile {
+  background: #fff8ea !important;
+  color: #1a2140 !important;
+  border: 1px solid #decfb4 !important;
+  box-shadow: 0 10px 22px rgba(41, 35, 23, 0.08) !important;
+}
+
+.panel h3,
+.feature h3,
+.faq-card h3,
+.price-card h3,
+.promo-tile h3,
+.panel p,
+.feature p,
+.faq-card p,
+.price-card p,
+.promo-tile p,
+.panel li,
+.price-card li {
+  color: #1a2140 !important;
+  opacity: 1 !important;
+}
+
+.panel.panel-green,
+.feature.feature-green,
+.faq-card.faq-green {
+  background: #bfe8e5 !important;
+}
+
+.panel.panel-orange,
+.feature.feature-orange,
+.faq-card.faq-orange,
+.tile-orange {
+  background: #f7cf7d !important;
+}
+
+.tile-green {
+  background: #a9ddd9 !important;
+}
+
+.price {
+  color: #121933 !important;
+  font-size: 2.4rem !important;
+}
