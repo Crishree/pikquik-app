@@ -1062,3 +1062,30 @@ body,
   color: #1a2140 !important;
   border-color: #d8cbb1 !important;
 }
+cat <<'EOF' >> public/landing.css
+
+/* --- Hard readability patch --- */
+.hero-main-card h1,
+.hero-main-card .subhead,
+.hero-main-card .hero-micro {
+  color: #1a2140 !important;
+  opacity: 1 !important;
+}
+.promo-tile,
+.tile-green,
+.tile-orange {
+  background: #f4cc76 !important;
+  border-color: #d4aa56 !important;
+}
+.promo-tile h3,
+.promo-tile p,
+.promo-tile span {
+  color: #1a2140 !important;
+  opacity: 1 !important;
+}
+.price-card,
+.price-card * {
+  color: #1a2140 !important;
+  opacity: 1 !important;
+}
+EOF
