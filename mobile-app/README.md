@@ -1,6 +1,6 @@
-# Vedic Chai Mobile App
+# Pikquik Mobile App
 
-Mobile version of the Vedic Chai pre-order flow built with Expo React Native.
+Mobile version of the Pikquik pre-order flow built with Expo React Native.
 
 ## Features
 
@@ -24,7 +24,7 @@ Mobile version of the Vedic Chai pre-order flow built with Expo React Native.
 2. Install Expo CLI dependencies from this folder:
 
 ```bash
-cd "/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-app"
+cd "/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-app"
 npm install
 ```
 
@@ -42,7 +42,7 @@ npm start
 ## Notes
 
 - Start backend server first from:
-  - `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App`
+  - `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App`
 - In mobile app dashboard, set `Backend URL`:
   - iOS Simulator: `http://localhost:3000`
   - Android Emulator: `http://10.0.2.2:3000`

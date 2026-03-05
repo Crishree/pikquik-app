@@ -54,8 +54,8 @@ export default function App() {
   const [selectedApp, setSelectedApp] = useState(null);
   const [authRole, setAuthRole] = useState(null);
 
-  const [outletName, setOutletName] = useState("Vedic Chai - Koramangala");
-  const [draftOutletName, setDraftOutletName] = useState("Vedic Chai - Koramangala");
+  const [outletName, setOutletName] = useState("Pikquik - Koramangala");
+  const [draftOutletName, setDraftOutletName] = useState("Pikquik - Koramangala");
 
   const [backendUrl, setBackendUrl] = useState("http://localhost:3000");
   const [draftBackendUrl, setDraftBackendUrl] = useState("http://localhost:3000");
@@ -147,7 +147,7 @@ export default function App() {
   }, [apiBaseUrl, settingsLoaded]);
 
   async function saveOutletName() {
-    const nextName = draftOutletName.trim() || "Vedic Chai Outlet";
+    const nextName = draftOutletName.trim() || "Pikquik Outlet";
     setOutletName(nextName);
     try {
       await AsyncStorage.setItem(STORAGE_KEYS.outletName, nextName);
@@ -267,7 +267,7 @@ function HeaderSettings({
 }) {
   return (
     <View style={styles.heroCard}>
-      <Text style={styles.heroLabel}>Vedic Chai Suite</Text>
+      <Text style={styles.heroLabel}>Pikquik Suite</Text>
       <Text style={styles.heroTitle}>{outletName}</Text>
       <Text style={styles.heroSub}>Customer app, outlet app, and admin dashboard</Text>
 

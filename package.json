@@ -1,7 +1,7 @@
 {
-  "name": "vedic-chai-preorder",
+  "name": "pikquik-preorder",
   "version": "1.0.0",
-  "description": "Simple Vedic Chai pre-order and pickup verification app",
+  "description": "Simple Pikquik pre-order and pickup verification app",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

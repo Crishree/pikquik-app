@@ -33,7 +33,7 @@ if (demoForm && demoFormStatus) {
       demoFormStatus.textContent = "Please fill name, email, and phone.";
       return;
     }
-    const subject = encodeURIComponent(`PikQuik Demo Request: ${name}`);
+    const subject = encodeURIComponent(`Pikquik Demo Request: ${name}`);
     const body = encodeURIComponent(
       `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nStores: ${stores || "Not provided"}\n\nRequested from www.pikquik.com`
     );

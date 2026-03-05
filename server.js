@@ -380,7 +380,7 @@ async function sendAdminCredentials(user, req, subjectPrefix = "Admin Login Cred
   user.mustChangePassword = true;
   user.status = user.status === "disabled" ? "disabled" : "active";
   const loginId = user.mobile || user.email || "";
-  const subjectBrand = String(paymentConfig.brandName || "").trim() || "PikQuik";
+  const subjectBrand = String(paymentConfig.brandName || "").trim() || "Pikquik";
   let delivery = "preview";
   if (user.email) {
     delivery = await deliverAdminEmail({
@@ -1545,6 +1545,6 @@ initializePersistence()
   })
   .finally(() => {
     server.listen(PORT, () => {
-      console.log(`Vedic Chai pre-order app running at http://localhost:${PORT}`);
+      console.log(`Pikquik pre-order app running at http://localhost:${PORT}`);
     });
   });

@@ -1,4 +1,4 @@
-# Vedic Chai Pre-Order App
+# Pikquik Pre-Order App
 
 A simple pre-order app where customers:
 - select menu items
@@ -51,32 +51,32 @@ npm start
 
 A React Native (Expo) version is available at:
 
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-app`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-app`
 
 See:
 
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-app/README.md`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-app/README.md`
 
 ## Separate Installable Mobile Apps
 
 Three independent Expo app targets are available:
 
 1. Customer App
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-customer`
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-customer/README.md`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-customer`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-customer/README.md`
 
 2. Outlet App
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-outlet`
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-outlet/README.md`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-outlet`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-outlet/README.md`
 
 3. Admin App
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-admin`
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/mobile-admin/README.md`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-admin`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/mobile-admin/README.md`
 
 ## Cloud Development (GitHub Codespaces)
 
 This repo is configured for Codespaces via:
-- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Vedic Chai/App/.devcontainer/devcontainer.json`
+- `/Users/shreedhar/Library/Mobile Documents/com~apple~CloudDocs/Pikquik/App/.devcontainer/devcontainer.json`
 
 ### Start in Codespaces
 
@@ -99,4 +99,4 @@ npm start
 4. Open PR to `main`
 5. Merge PR (Render auto-deploys from `main`)
 # Grab-and-Go-App
-# vedic-chai-app
+# pikquik-app
