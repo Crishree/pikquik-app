@@ -4,7 +4,7 @@
   "forwardPorts": [3000],
   "portsAttributes": {
     "3000": {
-      "label": "PikQuik Web App",
+      "label": "Pikquik Web App",
       "onAutoForward": "openBrowser"
     }
   },

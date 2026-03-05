@@ -18,7 +18,7 @@ const EMPTY_SUMMARY = {
   paymentBreakdown: {}
 };
 const EMPTY_PAYMENT_CONFIG = {
-  customerAppName: "Vedic Chai Grab And Go",
+  customerAppName: "Pikquik Grab And Go",
   upiId: "",
   payeeName: "",
   bankName: "",
@@ -33,8 +33,8 @@ export default function App() {
   const [username, setUsername] = useState("");
   const [pin, setPin] = useState("");
 
-  const [outletName, setOutletName] = useState("Vedic Chai - Koramangala");
-  const [draftOutletName, setDraftOutletName] = useState("Vedic Chai - Koramangala");
+  const [outletName, setOutletName] = useState("Pikquik - Koramangala");
+  const [draftOutletName, setDraftOutletName] = useState("Pikquik - Koramangala");
   const [backendUrl, setBackendUrl] = useState("http://localhost:3000");
   const [draftBackendUrl, setDraftBackendUrl] = useState("http://localhost:3000");
 
@@ -114,7 +114,7 @@ export default function App() {
   }
 
   async function saveSettings() {
-    const nextOutlet = draftOutletName.trim() || "Vedic Chai Outlet";
+    const nextOutlet = draftOutletName.trim() || "Pikquik Outlet";
     const nextBackend = normalizeBaseUrl(draftBackendUrl) || "http://localhost:3000";
     setOutletName(nextOutlet);
     setBackendUrl(nextBackend);

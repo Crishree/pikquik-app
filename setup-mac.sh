@@ -25,5 +25,5 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 
 echo "Node version: $(node -v)"
-echo "Starting Vedic Chai app..."
+echo "Starting Pikquik app..."
 npm start
