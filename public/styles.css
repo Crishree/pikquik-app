@@ -2404,3 +2404,71 @@ td {
     border-radius: 12px;
   }
 }
+
+/* Pikquik Unified Premium Theme (admin + outlet + customer) */
+:root {
+  --pq-bg: #f7f4ee; --pq-surface:#fff; --pq-ink:#171923; --pq-muted:#62687a;
+  --pq-border:#e6dccb; --pq-brand:#e8b949; --pq-brand-strong:#cb9a2c;
+  --pq-nav:#171a24; --pq-nav-2:#222738; --pq-nav-text:#f4f5f8;
+}
+.admin-page,.outlet-page,.customer-page{
+  background: radial-gradient(1000px 700px at 92% -12%, #fff2cc 0%, rgba(255,242,204,0) 55%), var(--pq-bg)!important;
+  color: var(--pq-ink)!important;
+}
+.admin-page .admin-topbar,.outlet-page .header,.customer-page .header{
+  background: linear-gradient(120deg,var(--pq-nav),var(--pq-nav-2))!important;
+  border:1px solid #2d3246!important;border-radius:18px!important;
+}
+.outlet-page .header,.customer-page .header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;margin-bottom:14px}
+.admin-page .admin-topbar-brand,.outlet-page .brand,.customer-page .brand{color:var(--pq-nav-text)!important;font-weight:800}
+.outlet-page .header a,.customer-page .header a{color:#dce3fb;text-decoration:none;font-weight:600}
+.admin-page .card.admin-card,.outlet-page .card,.customer-page .card{
+  background:var(--pq-surface)!important;border:1px solid var(--pq-border)!important;border-radius:18px!important;
+}
+.admin-page input,.admin-page select,.outlet-page input,.outlet-page select,.customer-page input,.customer-page select{
+  min-height:42px!important;border:1px solid var(--pq-border)!important;border-radius:12px!important;background:#fff!important;color:var(--pq-ink)!important;
+}
+.admin-page button,.outlet-page button,.customer-page button{
+  min-height:42px!important;border-radius:12px!important;border:1px solid #e4b347!important;
+  background:linear-gradient(120deg,var(--pq-brand),var(--pq-brand-strong))!important;
+  color:#2a210d!important;font-weight:800!important;
+}
+.admin-page .admin-sidebar{background:#1b1f2d!important}
+.admin-page .admin-side-btn{background:#23293a!important;color:#e7ecf8!important;border:1px solid #333a51!important}
+.admin-page .admin-side-btn-active,.admin-page .admin-side-btn-active:hover{
+  background:linear-gradient(120deg,#ffe5ab,#f4c45a)!important;color:#2c230f!important;border-color:#efbf55!important
+}
+
+/* Pikquik Unified Premium Theme (admin + outlet + customer) */
+:root {
+  --pq-bg: #f7f4ee; --pq-surface:#fff; --pq-ink:#171923; --pq-muted:#62687a;
+  --pq-border:#e6dccb; --pq-brand:#e8b949; --pq-brand-strong:#cb9a2c;
+  --pq-nav:#171a24; --pq-nav-2:#222738; --pq-nav-text:#f4f5f8;
+}
+.admin-page,.outlet-page,.customer-page{
+  background: radial-gradient(1000px 700px at 92% -12%, #fff2cc 0%, rgba(255,242,204,0) 55%), var(--pq-bg)!important;
+  color: var(--pq-ink)!important;
+}
+.admin-page .admin-topbar,.outlet-page .header,.customer-page .header{
+  background: linear-gradient(120deg,var(--pq-nav),var(--pq-nav-2))!important;
+  border:1px solid #2d3246!important;border-radius:18px!important;
+}
+.outlet-page .header,.customer-page .header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;margin-bottom:14px}
+.admin-page .admin-topbar-brand,.outlet-page .brand,.customer-page .brand{color:var(--pq-nav-text)!important;font-weight:800}
+.outlet-page .header a,.customer-page .header a{color:#dce3fb;text-decoration:none;font-weight:600}
+.admin-page .card.admin-card,.outlet-page .card,.customer-page .card{
+  background:var(--pq-surface)!important;border:1px solid var(--pq-border)!important;border-radius:18px!important;
+}
+.admin-page input,.admin-page select,.outlet-page input,.outlet-page select,.customer-page input,.customer-page select{
+  min-height:42px!important;border:1px solid var(--pq-border)!important;border-radius:12px!important;background:#fff!important;color:var(--pq-ink)!important;
+}
+.admin-page button,.outlet-page button,.customer-page button{
+  min-height:42px!important;border-radius:12px!important;border:1px solid #e4b347!important;
+  background:linear-gradient(120deg,var(--pq-brand),var(--pq-brand-strong))!important;
+  color:#2a210d!important;font-weight:800!important;
+}
+.admin-page .admin-sidebar{background:#1b1f2d!important}
+.admin-page .admin-side-btn{background:#23293a!important;color:#e7ecf8!important;border:1px solid #333a51!important}
+.admin-page .admin-side-btn-active,.admin-page .admin-side-btn-active:hover{
+  background:linear-gradient(120deg,#ffe5ab,#f4c45a)!important;color:#2c230f!important;border-color:#efbf55!important
+}
